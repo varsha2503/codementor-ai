@@ -1,0 +1,35 @@
+{
+  "source": "leetcode",
+  "permission": "Metadata and links only. Statements, examples, constraints, and solutions are not copied from the source.",
+  "entries": [
+    {
+      "externalSlug": "two-sum",
+      "externalId": "1",
+      "title": "Two Sum",
+      "difficulty": "EASY",
+      "topics": ["arrays"],
+      "tags": ["hash-map"],
+      "canonicalUrl": "https://leetcode.com/problems/two-sum/",
+      "localSlug": "pair-target"
+    },
+    {
+      "externalSlug": "valid-parentheses",
+      "externalId": "20",
+      "title": "Valid Parentheses",
+      "difficulty": "EASY",
+      "topics": ["strings"],
+      "tags": ["stack"],
+      "canonicalUrl": "https://leetcode.com/problems/valid-parentheses/",
+      "localSlug": "bracket-check"
+    },
+    {
+      "externalSlug": "regular-expression-matching",
+      "externalId": "10",
+      "title": "Regular Expression Matching",
+      "difficulty": "HARD",
+      "topics": ["strings"],
+      "tags": ["dynamic-programming"],
+      "canonicalUrl": "https://leetcode.com/problems/regular-expression-matching/"
+    }
+  ]
+}

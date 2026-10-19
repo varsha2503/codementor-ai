@@ -1,0 +1,91 @@
+{
+  "count": 17,
+  "note": "Same LeetCode/GFG slug appears twice on the sheet; only one catalog row is kept.",
+  "items": [
+    {
+      "title": "Factorial of a Given Number",
+      "externalSlug": "factorial-of-a-given-number",
+      "source": "geeksforgeeks"
+    },
+    {
+      "title": "Reverse a String I",
+      "externalSlug": "reverse-string",
+      "source": "leetcode"
+    },
+    {
+      "title": "Check if String is Palindrome or Not",
+      "externalSlug": "valid-palindrome",
+      "source": "leetcode"
+    },
+    {
+      "title": "Left Rotate Array by K Places",
+      "externalSlug": "rotate-array",
+      "source": "leetcode"
+    },
+    {
+      "title": "Largest Subarray with Sum 0",
+      "externalSlug": "maximum-size-subarray-sum-equals-k",
+      "source": "leetcode"
+    },
+    {
+      "title": "Book Allocation Problem",
+      "externalSlug": "split-array-largest-sum",
+      "source": "leetcode"
+    },
+    {
+      "title": "Split array - largest sum",
+      "externalSlug": "split-array-largest-sum",
+      "source": "leetcode"
+    },
+    {
+      "title": "Subsets I",
+      "externalSlug": "subsets",
+      "source": "leetcode"
+    },
+    {
+      "title": "Reverse a LL",
+      "externalSlug": "reverse-linked-list",
+      "source": "leetcode"
+    },
+    {
+      "title": "Power Set Bit Manipulation",
+      "externalSlug": "subsets",
+      "source": "leetcode"
+    },
+    {
+      "title": "Morris Inorder Traversal",
+      "externalSlug": "binary-tree-inorder-traversal",
+      "source": "leetcode"
+    },
+    {
+      "title": "Morris Preorder Traversal",
+      "externalSlug": "binary-tree-preorder-traversal",
+      "source": "leetcode"
+    },
+    {
+      "title": "Merge K sorted Lists",
+      "externalSlug": "merge-k-sorted-lists",
+      "source": "leetcode"
+    },
+    {
+      "title": "Detect a cycle in a directed graph",
+      "externalSlug": "course-schedule",
+      "source": "leetcode"
+    },
+    {
+      "title": "Course Schedule I",
+      "externalSlug": "course-schedule",
+      "source": "leetcode"
+    },
+    {
+      "title": "House robber",
+      "externalSlug": "house-robber",
+      "source": "leetcode"
+    },
+    {
+      "title": "Count primes in range L to R",
+      "externalSlug": "count-primes",
+      "source": "leetcode"
+    }
+  ]
+}

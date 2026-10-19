@@ -1,0 +1,87 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - run: npm ci
+      - run: npx prisma generate
+      - run: npm test
+
+  migrate:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - run: npm ci
+      - run: npx prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+  render:
+    needs: migrate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Render API deploy
+        env:
+          DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK_API }}
+        if: env.DEPLOY_HOOK != ''
+        run: curl -fsS -X POST "$DEPLOY_HOOK"
+      - name: Trigger Render Web deploy
+        env:
+          DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK_WEB }}
+        if: env.DEPLOY_HOOK != ''
+        run: curl -fsS -X POST "$DEPLOY_HOOK"
+
+  gcp-worker:
+    needs: migrate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Skip when GCP SSH is not configured
+        id: gate
+        env:
+          GCP_SSH_HOST: ${{ secrets.GCP_SSH_HOST }}
+        run: |
+          if [ -z "$GCP_SSH_HOST" ]; then
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "GCP_SSH_HOST not set; skipping worker deploy."
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Deploy judge worker on GCP VM
+        if: steps.gate.outputs.configured == 'true'
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.GCP_SSH_HOST }}
+          username: ${{ secrets.GCP_SSH_USER }}
+          key: ${{ secrets.GCP_SSH_KEY }}
+          script_stop: true
+          script: |
+            set -eu
+            APP_DIR="${{ secrets.GCP_APP_DIR }}"
+            if [ -z "$APP_DIR" ]; then APP_DIR="$HOME/codementor"; fi
+            cd "$APP_DIR"
+            git fetch origin main
+            git checkout main
+            git pull --ff-only origin main
+            docker build -t codementor-runner:1 workers/judge/docker
+            docker compose -f docker-compose.worker.yml up -d --build
+            docker compose -f docker-compose.worker.yml ps

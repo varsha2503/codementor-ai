@@ -1,0 +1,18 @@
+# GCP VM: judge worker only (Docker socket + runner image on the host).
+# Usage: docker compose -f docker-compose.worker.yml up -d --build
+
+services:
+  worker:
+    build:
+      context: .
+      dockerfile: workers/judge/Dockerfile
+    env_file:
+      - path: .env
+        required: true
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: ${REDIS_URL}
+      RUNNER_IMAGE: ${RUNNER_IMAGE:-codementor-runner:1}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped

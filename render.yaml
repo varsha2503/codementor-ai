@@ -1,0 +1,56 @@
+# Optional Render Blueprint: Dashboard → New → Blueprint → connect repo.
+# After first deploy, set WEB_ORIGIN (web URL) and confirm API_UPSTREAM on the web service.
+
+databases:
+  - name: codementor-postgres
+    plan: free
+    databaseName: codementor
+    user: codementor
+
+services:
+  - type: keyvalue
+    name: codementor-redis
+    plan: free
+    maxmemoryPolicy: allkeys-lru
+    ipAllowList: []
+
+  - type: web
+    name: codementor-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./apps/api/Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/v1/health
+    preDeployCommand: npx prisma migrate deploy
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: codementor-postgres
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: keyvalue
+          name: codementor-redis
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: PORT
+        value: "4000"
+      - key: WEB_ORIGIN
+        sync: false
+      - key: LLM_API_KEY
+        sync: false
+      - key: LLM_BASE_URL
+        value: https://api.openai.com/v1
+      - key: LLM_MODEL
+        value: gpt-4o-mini
+
+  - type: web
+    name: codementor-web
+    runtime: docker
+    plan: free
+    dockerfilePath: ./apps/web/Dockerfile
+    dockerContext: .
+    envVars:
+      - key: API_UPSTREAM
+        sync: false

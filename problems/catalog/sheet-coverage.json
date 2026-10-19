@@ -1,0 +1,247 @@
+{
+  "generatedAt": "2026-10-18T10:17:39.551Z",
+  "sheetRows": 474,
+  "catalogEntries": 456,
+  "withLocalProblem": 422,
+  "missingLocalProblem": 34,
+  "missing": [
+    {
+      "title": "Cpp Basics",
+      "category": "Learn the basics",
+      "subcategory": "Things to Know in C++/Java/Python or any language",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "If ElseIf",
+      "category": "Learn the basics",
+      "subcategory": "Things to Know in C++/Java/Python or any language",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "Switch Case",
+      "category": "Learn the basics",
+      "subcategory": "Things to Know in C++/Java/Python or any language",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "Functions (Pass by Reference and Value)",
+      "category": "Learn the basics",
+      "subcategory": "Things to Know in C++/Java/Python or any language",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "Theory with examples",
+      "category": "Learn the basics",
+      "subcategory": "Things to Know in C++/Java/Python or any language",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "Easy and Medium",
+      "category": "Learn the basics",
+      "subcategory": "Build-up Logical Thinking",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "Hard",
+      "category": "Learn the basics",
+      "subcategory": "Build-up Logical Thinking",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "STL",
+      "category": "Learn the basics",
+      "subcategory": "Learn STL/Java-Collections or similar thing in your language",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "Java Collections",
+      "category": "Learn the basics",
+      "subcategory": "Learn STL/Java-Collections or similar thing in your language",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "Search insert position",
+      "category": "Binary Search [1D, 2D Arrays, Search Space]",
+      "subcategory": "BS on 1D Arrays",
+      "leetcodeUrl": "https://leetcode.com/problems/search-insert-position/#:~:text=Search%20Insert%20Position%20%2D%20LeetCode&text=Given%20a%20sorted%20array%20of,(log%20n)%20runtime%20complexity.",
+      "gfgUrl": null
+    },
+    {
+      "title": "Book Allocation Problem",
+      "category": "Binary Search [1D, 2D Arrays, Search Space]",
+      "subcategory": "BS on Answers",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "Painter's Partition",
+      "category": "Binary Search [1D, 2D Arrays, Search Space]",
+      "subcategory": "BS on Answers",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "Matrix Median",
+      "category": "Binary Search [1D, 2D Arrays, Search Space]",
+      "subcategory": "BS on 2D Arrays",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "Introduction to Singly LinkedList",
+      "category": "Learn LinkedList [Single LL, Double LL, Medium, Hard Problems]",
+      "subcategory": "Learn 1D LinkedList",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "Introduction to Doubly LL",
+      "category": "Learn LinkedList [Single LL, Double LL, Medium, Hard Problems]",
+      "subcategory": "Learn Doubly LinkedList",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "Learn All Patterns of Subsequences (Theory)",
+      "category": "Recursion [PatternWise]",
+      "subcategory": "Subsequences Pattern",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "Introduction to Bits and Tricks",
+      "category": "Bit Manipulation [Concepts & Problems]",
+      "subcategory": "Learn Bit Manipulation",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "Heaps (Theory Video)",
+      "category": "Heaps [Learning, Medium, Hard Problems]",
+      "subcategory": "Learning",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "Program for Least Recently Used (LRU) Page Replacement Algorithm",
+      "category": "Greedy Algorithms [Easy, Medium/Hard]",
+      "subcategory": "Medium/Hard",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "Introduction to Trees",
+      "category": "Binary Trees [Traversals, Medium and Hard Problems]",
+      "subcategory": "Traversals",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "Binary Tree Representation in Java",
+      "category": "Binary Trees [Traversals, Medium and Hard Problems]",
+      "subcategory": "Traversals",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "Requirements needed to construct a unique BT",
+      "category": "Binary Trees [Traversals, Medium and Hard Problems]",
+      "subcategory": "Hard Problems",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "Introduction to BST",
+      "category": "Binary Search Trees [Concept and Problems]",
+      "subcategory": "Concepts",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "Introduction to Graph",
+      "category": "Graphs [Concepts & Problems]",
+      "subcategory": "Learning",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "Graph Representation | C++",
+      "category": "Graphs [Concepts & Problems]",
+      "subcategory": "Learning",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "Graph Representation | Java",
+      "category": "Graphs [Concepts & Problems]",
+      "subcategory": "Learning",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "Traversal Techniques",
+      "category": "Graphs [Concepts & Problems]",
+      "subcategory": "Learning",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "Cycle Detection in Undirected Graph (bfs)",
+      "category": "Graphs [Concepts & Problems]",
+      "subcategory": "Problems on BFS/DFS",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "Why priority Queue is used in Djisktra's Algorithm",
+      "category": "Graphs [Concepts & Problems]",
+      "subcategory": "Shortest Path Algorithms and Problems",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "MST theory",
+      "category": "Graphs [Concepts & Problems]",
+      "subcategory": "MinimumSpanningTree/Disjoint Set and Problems",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "Find the MST weight",
+      "category": "Graphs [Concepts & Problems]",
+      "subcategory": "MinimumSpanningTree/Disjoint Set and Problems",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "Introduction to DP",
+      "category": "Dynamic Programming [Patterns and Problems]",
+      "subcategory": "Introduction to DP",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "Bit PreRequisites for TRIE Problems",
+      "category": "Tries",
+      "subcategory": "Problems",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    },
+    {
+      "title": "Hashing In Strings | Theory",
+      "category": "Strings",
+      "subcategory": "Hard Problems",
+      "leetcodeUrl": null,
+      "gfgUrl": null
+    }
+  ]
+}

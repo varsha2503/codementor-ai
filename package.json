@@ -1,0 +1,62 @@
+{
+  "name": "codementor-ai",
+  "private": true,
+  "version": "0.1.0",
+  "description": "CodeMentor AI — coding interview practice where the judge decides correctness and the model explains it.",
+  "engines": {
+    "node": ">=20"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "workers/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n api,worker,web -c blue,magenta,green \"npm run dev -w @codementor/api\" \"npm run dev -w @codementor/worker\" \"npm run dev -w @codementor/web\"",
+    "test": "jest",
+    "test:shared": "jest --selectProjects shared",
+    "test:api": "jest --selectProjects api",
+    "test:web": "jest --selectProjects web",
+    "test:worker": "jest --selectProjects worker",
+    "test:runner:integration": "RUNNER_INTEGRATION=1 tsx workers/judge/tests/runIntegrationTests.ts",
+    "test:runner:report": "tsx workers/judge/tests/reportRunner.ts",
+    "load:seed-users": "bash scripts/load/seed-test-users.sh",
+    "load:experiment:read": "k6 run scripts/load/multi-user-read.js",
+    "load:experiment:run": "k6 run scripts/load/multi-user-run.js",
+    "load:find-max:read": "k6 run scripts/load/ramp-read-capacity.js",
+    "load:find-max:run": "k6 run scripts/load/ramp-run-capacity.js",
+    "load:test:rate-limit": "k6 run scripts/load/rate-limit.js",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate deploy",
+    "db:seed": "prisma db seed",
+    "runner:build": "docker build -t codementor-runner:1 workers/judge/docker",
+    "self-check": "npm run self-check -w @codementor/worker",
+    "catalog:import": "tsx scripts/importCatalog.ts",
+    "catalog:build-striver": "tsx scripts/buildStriverCatalog.ts --fetch --probe",
+    "sheet:import-xlsx": "tsx scripts/importDsaProblemListXlsx.ts",
+    "setup": "bash scripts/setup.sh"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.16.2",
+    "dotenv": "^18.0.7",
+    "groq-sdk": "^1.6.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@types/jest": "^29.5.14",
+    "@types/supertest": "^6.0.3",
+    "bcryptjs": "^3.0.2",
+    "concurrently": "^9.2.1",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "prisma": "^6.16.2",
+    "supertest": "^7.1.4",
+    "ts-jest": "^29.2.5",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  }
+}

@@ -1,0 +1,233 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum Visibility {
+  SAMPLE
+  HIDDEN
+}
+
+enum CompareMode {
+  EXACT
+  UNORDERED
+  TOPOLOGICAL
+}
+
+enum AttemptKind {
+  RUN
+  SUBMIT
+}
+
+enum Verdict {
+  QUEUED
+  COMPILING
+  RUNNING
+  EVALUATING
+  ACCEPTED
+  WRONG_ANSWER
+  COMPILE_ERROR
+  TIME_LIMIT_EXCEEDED
+  MEMORY_LIMIT_EXCEEDED
+  RUNTIME_ERROR
+  CANCELLED
+  INTERNAL_ERROR
+}
+
+enum InteractionType {
+  HINT
+  ANALYSIS
+  CLASSIFICATION
+  TEST_GENERATION
+  INTERVIEW
+}
+
+enum CatalogLicense {
+  LINK_ONLY
+  LOCAL_STATEMENT
+}
+
+enum CatalogImportStatus {
+  IMPORTED
+  REJECTED
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  displayName  String
+  createdAt    DateTime @default(now())
+  attempts     Attempt[]
+  interactions AIInteraction[]
+}
+
+model Problem {
+  id                String      @id @default(cuid())
+  slug              String      @unique
+  title             String
+  difficulty        Difficulty
+  topics            String[]
+  tags              String[]
+  statement         String      @db.Text
+  constraints       String[]
+  examples          Json
+  starterCode       String      @db.Text
+  functionName      String
+  driverCode        String      @db.Text
+  compareMode       CompareMode
+  timeLimitMs       Int
+  memoryLimitKb     Int
+  expectedTime      String
+  expectedSpace     String
+  referenceSolution String      @db.Text
+  hintLadder        Json
+  version           Int         @default(1)
+  createdAt         DateTime    @default(now())
+  testCases         TestCase[]
+  attempts          Attempt[]
+  interactions      AIInteraction[]
+  evaluationCases   EvaluationCase[]
+  catalogEntries    ProblemCatalogEntry[]
+}
+
+model TestCase {
+  id             String     @id @default(cuid())
+  problemId      String
+  input          Json
+  expectedOutput Json
+  visibility     Visibility
+  version        Int        @default(1)
+  ordinal        Int
+  problem        Problem    @relation(fields: [problemId], references: [id], onDelete: Cascade)
+
+  @@index([problemId, visibility, ordinal])
+}
+
+model Attempt {
+  id             String        @id @default(cuid())
+  userId         String
+  problemId      String
+  problemVersion Int
+  code           String        @db.Text
+  language       String
+  kind           AttemptKind
+  verdict        Verdict
+  runtimeMs      Int?
+  memoryKb       Int?
+  testsPassed    Int           @default(0)
+  testsTotal     Int           @default(0)
+  message        String?
+  compileOutput  String?       @db.Text
+  testSummary    Json?
+  createdAt      DateTime      @default(now())
+  finishedAt     DateTime?
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  problem        Problem       @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  job            ExecutionJob?
+  interactions   AIInteraction[]
+  issues         AttemptIssue[]
+
+  @@index([userId, createdAt])
+  @@index([problemId, userId])
+}
+
+model AIInteraction {
+  id             String               @id @default(cuid())
+  userId         String
+  problemId      String?
+  catalogEntryId String?
+  attemptId      String?
+  type           InteractionType
+  level          Int?
+  response       Json
+  model          String
+  createdAt      DateTime             @default(now())
+  user           User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  problem        Problem?             @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  catalogEntry   ProblemCatalogEntry? @relation(fields: [catalogEntryId], references: [id], onDelete: Cascade)
+  attempt        Attempt?             @relation(fields: [attemptId], references: [id], onDelete: SetNull)
+
+  @@index([userId, problemId, type, createdAt])
+  @@index([userId, catalogEntryId, type, createdAt])
+}
+
+model ProblemCatalogEntry {
+  id              String              @id @default(cuid())
+  source          String
+  externalSlug    String
+  externalId      String?
+  title           String
+  difficulty      Difficulty
+  topics          String[]
+  tags            String[]
+  canonicalUrl    String
+  licenseStatus   CatalogLicense
+  permissionNote  String
+  attribution     String?
+  importStatus    CatalogImportStatus
+  rejectionReason String?
+  importedAt      DateTime?
+  problemId       String?
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  problem         Problem?            @relation(fields: [problemId], references: [id], onDelete: SetNull)
+  interactions    AIInteraction[]
+
+  @@unique([source, externalSlug])
+  @@index([importStatus, title])
+  @@index([problemId])
+}
+
+model AttemptIssue {
+  id         String   @id @default(cuid())
+  attemptId  String
+  category   String
+  severity   String
+  confidence String
+  rationale  String?
+  attempt    Attempt  @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+
+  @@index([attemptId])
+  @@index([category])
+}
+
+model ExecutionJob {
+  id          String    @id @default(cuid())
+  attemptId   String    @unique
+  status      Verdict
+  queueJobId  String?
+  startedAt   DateTime?
+  finishedAt  DateTime?
+  failureCode String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  attempt     Attempt   @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+
+  @@index([status, createdAt])
+}
+
+model EvaluationCase {
+  id               String   @id @default(cuid())
+  problemId        String
+  input            Json
+  expectedOutput   Json?
+  source           String
+  status           String
+  rejectionReason  String?
+  batchId          String?
+  createdAt        DateTime @default(now())
+  problem          Problem  @relation(fields: [problemId], references: [id], onDelete: Cascade)
+
+  @@index([problemId, status])
+}

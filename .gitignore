@@ -1,0 +1,12 @@
+node_modules
+dist
+.env
+coverage
+playwright-report
+test-results
+*.log
+.DS_Store
+apps/web/dist
+tmp
+scripts/load/tokens.json
+.prisma

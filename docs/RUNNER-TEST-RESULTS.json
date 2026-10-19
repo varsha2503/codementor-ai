@@ -1,0 +1,104 @@
+{
+  "generatedAt": "2026-10-19T09:07:59.224Z",
+  "runnerImage": "codementor-runner:1",
+  "dockerAvailable": true,
+  "runnerImagePresent": true,
+  "versions": {
+    "cpp": "g++ (GCC) 13.5.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "java": "javac 17.0.20.1",
+    "python": "Python 3.11.2"
+  },
+  "rows": [
+    {
+      "name": "smoke_valid",
+      "language": "cpp",
+      "ok": true,
+      "detail": "cases=2"
+    },
+    {
+      "name": "compile_or_syntax_error",
+      "language": "cpp",
+      "ok": true,
+      "detail": "In file included from /src/main.cpp:2:\n/src/solution.cpp:1:51: error: stray '@' in program\n    1 | class Solution { publ"
+    },
+    {
+      "name": "wrong_answer_output",
+      "language": "cpp",
+      "ok": true,
+      "detail": "0"
+    },
+    {
+      "name": "runtime_error",
+      "language": "cpp",
+      "ok": true,
+      "detail": "RUNTIME_ERROR"
+    },
+    {
+      "name": "timeout",
+      "language": "cpp",
+      "ok": true,
+      "detail": "TIME_LIMIT_EXCEEDED"
+    },
+    {
+      "name": "smoke_valid",
+      "language": "python3",
+      "ok": true,
+      "detail": "cases=2"
+    },
+    {
+      "name": "compile_or_syntax_error",
+      "language": "python3",
+      "ok": true,
+      "detail": "  File \"/src/solution.py\", line 1\n    class Solution\n                  ^\nSyntaxError: expected ':'\n"
+    },
+    {
+      "name": "wrong_answer_output",
+      "language": "python3",
+      "ok": true,
+      "detail": "0"
+    },
+    {
+      "name": "runtime_error",
+      "language": "python3",
+      "ok": true,
+      "detail": "RUNTIME_ERROR"
+    },
+    {
+      "name": "timeout",
+      "language": "python3",
+      "ok": true,
+      "detail": "TIME_LIMIT_EXCEEDED"
+    },
+    {
+      "name": "smoke_valid",
+      "language": "java",
+      "ok": true,
+      "detail": "cases=2"
+    },
+    {
+      "name": "compile_or_syntax_error",
+      "language": "java",
+      "ok": true,
+      "detail": "/src/Solution.java:1: error: incompatible types: missing return value\nclass Solution { public int countDigits(int n) { r"
+    },
+    {
+      "name": "wrong_answer_output",
+      "language": "java",
+      "ok": true,
+      "detail": "0"
+    },
+    {
+      "name": "runtime_error",
+      "language": "java",
+      "ok": true,
+      "detail": "RUNTIME_ERROR"
+    },
+    {
+      "name": "timeout",
+      "language": "java",
+      "ok": true,
+      "detail": "TIME_LIMIT_EXCEEDED"
+    }
+  ],
+  "blocked": []
+}

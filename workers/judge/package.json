@@ -1,0 +1,22 @@
+{
+  "name": "@codementor/worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/consumer.ts",
+    "start": "tsx src/consumer.ts",
+    "self-check": "tsx tests/selfCheck.ts",
+    "test": "jest --selectProjects worker"
+  },
+  "dependencies": {
+    "@codementor/shared": "*",
+    "@prisma/client": "^6.16.2",
+    "bullmq": "^5.58.5",
+    "dotenv": "^17.2.2",
+    "ioredis": "^5.7.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.5"
+  }
+}

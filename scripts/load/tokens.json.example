@@ -1,0 +1,6 @@
+{
+  "apiBase": "http://localhost:4000",
+  "users": [
+    { "email": "loadtest+1@codementor.local", "token": "<jwt>" }
+  ]
+}
