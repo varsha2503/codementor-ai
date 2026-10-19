@@ -11,7 +11,7 @@ services:
   - type: keyvalue
     name: codementor-redis
     plan: free
-    maxmemoryPolicy: allkeys-lru
+    maxmemoryPolicy: noeviction
     ipAllowList: []
 
   - type: web
@@ -21,7 +21,8 @@ services:
     dockerfilePath: ./apps/api/Dockerfile
     dockerContext: .
     healthCheckPath: /api/v1/health
-    preDeployCommand: npx prisma migrate deploy
+    # Free tier: preDeployCommand is not allowed — run migrations via GitHub Actions
+    # (DATABASE_URL secret) or once locally; see docs/DEPLOY.md
     envVars:
       - key: DATABASE_URL
         fromDatabase:

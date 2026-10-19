@@ -53,6 +53,7 @@ Render can also **auto-deploy on push** when the repo is connected; deploy hooks
    - Dockerfile: `apps/api/Dockerfile`.
    - Env: `DATABASE_URL`, `REDIS_URL`, `JWT_SECRET`, `PORT=4000`, `WEB_ORIGIN`, optional `LLM_*`.
    - Health check path: `/api/v1/health`.
+   - **Free tier:** Render does not allow `preDeployCommand`; run `npx prisma migrate deploy` via GitHub Actions or locally (below).
 4. **Web** — New → Web Service → Docker:
    - Dockerfile: `apps/web/Dockerfile`.
    - Env: `API_UPSTREAM=https://<your-api>.onrender.com`.
