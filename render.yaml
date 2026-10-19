@@ -1,5 +1,5 @@
-# Optional Render Blueprint: Dashboard → New → Blueprint → connect repo.
-# After first deploy, set WEB_ORIGIN (web URL) and confirm API_UPSTREAM on the web service.
+# Render Blueprint: Postgres, Redis, API, Web (worker runs on AWS EC2 — see docs/DEPLOY-AWS.md).
+# After deploy: WEB_ORIGIN + API_UPSTREAM on web/api; for AWS worker add EC2 Elastic IP to codementor-redis ipAllowList (dashboard).
 
 databases:
   - name: codementor-postgres
@@ -12,6 +12,7 @@ services:
     name: codementor-redis
     plan: free
     maxmemoryPolicy: noeviction
+    # Internal-only from Blueprint; AWS worker uses External Redis URL + your EC2 IP in Render dashboard → Networking.
     ipAllowList: []
 
   - type: web

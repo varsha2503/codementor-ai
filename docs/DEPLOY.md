@@ -1,4 +1,6 @@
-# Deploy: Render (Postgres, Redis, API, Web) + GCP (judge worker)
+# Deploy: Render (Postgres, Redis, API, Web) + AWS EC2 (judge worker)
+
+> **AWS worker guide:** [DEPLOY-AWS.md](./DEPLOY-AWS.md) (recommended). GCP steps below are legacy-equivalent on any Docker VM.
 
 ## Architecture
 

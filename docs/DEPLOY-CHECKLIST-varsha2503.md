@@ -1,6 +1,6 @@
 # Deployment checklist (varsha2503)
 
-Architecture: **Render** (Postgres, Redis, API, Web) + **GCP VM** (judge worker only).
+Architecture: **Render** (Postgres, Redis, API, Web) + **AWS EC2** (judge worker). See **docs/DEPLOY-AWS.md**.
 
 ---
 
@@ -15,10 +15,10 @@ Architecture: **Render** (Postgres, Redis, API, Web) + **GCP VM** (judge worker 
 | `DATABASE_URL` | Render Postgres **External** URL |
 | `RENDER_DEPLOY_HOOK_API` | Render → codementor-api → Deploy Hook |
 | `RENDER_DEPLOY_HOOK_WEB` | Render → codementor-web → Deploy Hook |
-| `GCP_SSH_HOST` | GCP VM external IP |
-| `GCP_SSH_USER` | e.g. `ubuntu` |
-| `GCP_SSH_KEY` | Private key PEM |
-| `GCP_APP_DIR` | e.g. `/home/ubuntu/codementor` |
+| `AWS_SSH_HOST` | EC2 Elastic IP |
+| `AWS_SSH_USER` | e.g. `ubuntu` |
+| `AWS_SSH_KEY` | Private key PEM (`.pem` file contents) |
+| `AWS_APP_DIR` | e.g. `/home/ubuntu/codementor` |
 
 ---
 
@@ -62,35 +62,15 @@ curl -s https://<api-host>/api/v1/health | jq .
 
 ---
 
-## Phase C — GCP VM (worker)
+## Phase C — AWS EC2 (worker)
 
-1. **Compute Engine** → Ubuntu 22.04, e2-small recommended, 30GB disk
-2. Firewall: **TCP 22** from your IP only
-3. SSH in → install Docker (see `docs/DEPLOY.md`)
-4. Clone:
+Full steps: **`docs/DEPLOY-AWS.md`** and **`infra/aws/README.md`**.
 
-```bash
-git clone https://github.com/varsha2503/codementor-ai.git ~/codementor
-cd ~/codementor
-```
-
-5. Create `.env`:
-
-```env
-DATABASE_URL=<Render Postgres External URL — same as API>
-REDIS_URL=<Render Redis External URL>
-RUNNER_IMAGE=codementor-runner:1
-```
-
-6. Build runner + start worker:
-
-```bash
-docker build -t codementor-runner:1 workers/judge/docker
-docker compose -f docker-compose.worker.yml up -d --build
-docker compose -f docker-compose.worker.yml logs -f worker
-```
-
-7. Add deploy SSH public key → GitHub secret `GCP_SSH_KEY`
+1. Render **codementor-redis** → allow **EC2 Elastic IP**; copy External Redis URL.
+2. EC2: Ubuntu 22.04, **t3.small**, **EBS 30 GiB gp3**, security group SSH from your IP.
+3. Elastic IP → associate with instance.
+4. Clone repo, `.env`, `docker compose -f docker-compose.worker.yml up -d --build`.
+5. GitHub secrets `AWS_SSH_*` for CI deploy (optional).
 
 ---
 
