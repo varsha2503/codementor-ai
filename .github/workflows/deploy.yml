@@ -4,6 +4,12 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      seed_problems:
+        description: "Run prisma db seed after migrate (problems + test cases)"
+        required: false
+        default: false
+        type: boolean
 
 concurrency:
   group: deploy-production
@@ -49,8 +55,36 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
-  render:
+  seed:
     needs: migrate
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.seed_problems == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Skip when production database is not configured
+        id: gate
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - run: npm ci
+      - name: Seed problems and test cases
+        if: steps.gate.outputs.configured == 'true'
+        run: npx prisma db seed
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+  render:
+    needs: [migrate, seed]
+    if: always() && needs.migrate.result == 'success' && (needs.seed.result == 'success' || needs.seed.result == 'skipped')
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Render API deploy
@@ -65,7 +99,8 @@ jobs:
         run: curl -fsS -X POST "$DEPLOY_HOOK"
 
   aws-worker:
-    needs: migrate
+    needs: [migrate, seed]
+    if: always() && needs.migrate.result == 'success' && (needs.seed.result == 'success' || needs.seed.result == 'skipped')
     runs-on: ubuntu-latest
     steps:
       - name: Skip when AWS SSH is not configured
@@ -91,6 +126,8 @@ jobs:
             set -eu
             APP_DIR="${{ secrets.AWS_APP_DIR }}"
             if [ -z "$APP_DIR" ]; then APP_DIR="$HOME/codementor"; fi
+            sudo mkdir -p /var/codementor-jobs
+            sudo chmod 1777 /var/codementor-jobs
             cd "$APP_DIR"
             git fetch origin main
             git checkout main
