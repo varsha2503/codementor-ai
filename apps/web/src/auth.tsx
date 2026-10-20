@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { api, getToken, setToken } from "./api/client";
+import { ensureBackendReady } from "./api/wakeBackend";
 
 export type User = { id: string; email: string; displayName: string; createdAt: string };
 
@@ -25,6 +26,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
     try {
+      await ensureBackendReady();
       const body = await api<{ user: User }>("/api/v1/users/me");
       setUser(body.user);
     } catch {
@@ -44,6 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       loading,
       refresh,
       async login(email, password) {
+        await ensureBackendReady();
         const body = await api<{ token: string; user: User }>("/api/v1/auth/login", {
           method: "POST",
           body: JSON.stringify({ email, password }),
@@ -52,6 +55,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(body.user);
       },
       async register(displayName, email, password) {
+        await ensureBackendReady();
         const body = await api<{ token: string; user: User }>("/api/v1/auth/register", {
           method: "POST",
           body: JSON.stringify({ displayName, email, password }),
