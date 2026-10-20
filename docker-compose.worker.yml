@@ -13,6 +13,8 @@ services:
       DATABASE_URL: ${DATABASE_URL}
       REDIS_URL: ${REDIS_URL}
       RUNNER_IMAGE: ${RUNNER_IMAGE:-codementor-runner:1}
+      JUDGE_TMP_ROOT: /var/codementor-jobs
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - /var/codementor-jobs:/var/codementor-jobs
     restart: unless-stopped

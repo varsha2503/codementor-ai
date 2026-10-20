@@ -87,7 +87,10 @@ export async function runInSandbox(options: {
 }): Promise<DockerRunResult> {
   const language = options.language ?? "cpp";
   const id = `cm${randomBytes(6).toString("hex")}`;
-  const root = path.join(os.tmpdir(), "codementor-jobs", id);
+  // When the worker runs in Docker with a mounted host socket, docker run -v paths must
+  // exist on the host. Set JUDGE_TMP_ROOT to a host bind-mount (e.g. /var/codementor-jobs).
+  const jobsRoot = process.env.JUDGE_TMP_ROOT ?? path.join(os.tmpdir(), "codementor-jobs");
+  const root = path.join(jobsRoot, id);
   const srcDir = path.join(root, "src");
   const outDir = path.join(root, "out");
   const { timeLimitSec, cpuSeconds, wallMs } = timeBudget(options.timeLimitMs, options.inputs.length);

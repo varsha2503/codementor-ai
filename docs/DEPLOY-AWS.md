@@ -103,7 +103,10 @@ RUNNER_IMAGE=codementor-runner:1
 **Start worker:**
 
 ```bash
+sudo mkdir -p /var/codementor-jobs
+sudo chmod 1777 /var/codementor-jobs
 cd ~/codementor
+git pull
 docker build -t codementor-runner:1 workers/judge/docker
 docker compose -f docker-compose.worker.yml up -d --build
 docker compose -f docker-compose.worker.yml logs -f worker
