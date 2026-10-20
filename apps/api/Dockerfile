@@ -8,6 +8,7 @@ COPY packages/shared/package.json packages/shared/package.json
 RUN npm install
 COPY prisma prisma
 COPY packages/shared packages/shared
+COPY problems/catalog problems/catalog
 COPY apps/api apps/api
 RUN npx prisma generate
 EXPOSE 4000
