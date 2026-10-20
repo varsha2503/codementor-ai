@@ -28,11 +28,18 @@ describe("difficultyStats", () => {
     const stats = difficultyStats(attempts, problems);
     expect(stats.find((row) => row.difficulty === "EASY")).toEqual({
       difficulty: "EASY",
+      total: 1,
       attempted: 1,
       solved: 1,
       accuracy: 1,
     });
-    expect(stats.find((row) => row.difficulty === "MEDIUM")?.accuracy).toBe(0);
+    expect(stats.find((row) => row.difficulty === "MEDIUM")).toEqual({
+      difficulty: "MEDIUM",
+      total: 1,
+      attempted: 1,
+      solved: 0,
+      accuracy: 0,
+    });
   });
 });
 

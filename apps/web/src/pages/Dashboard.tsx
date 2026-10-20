@@ -33,16 +33,11 @@ type AttemptRow = {
 };
 
 export function Dashboard() {
-  const { user, refresh } = useAuth();
+  const { user } = useAuth();
   const [analytics, setAnalytics] = useState<Analytics | null>(null);
   const [recommended, setRecommended] = useState<Problem[]>([]);
   const [attempts, setAttempts] = useState<AttemptRow[]>([]);
-  const [name, setName] = useState(user?.displayName ?? "");
   const [error, setError] = useState("");
-
-  useEffect(() => {
-    setName(user?.displayName ?? "");
-  }, [user?.displayName]);
 
   useEffect(() => {
     Promise.all([
@@ -57,11 +52,6 @@ export function Dashboard() {
       })
       .catch((err) => setError(err instanceof Error ? err.message : "Could not load your desk."));
   }, []);
-
-  async function saveName() {
-    await api("/api/v1/users/me", { method: "PATCH", body: JSON.stringify({ displayName: name }) });
-    await refresh();
-  }
 
   const practiced = (analytics?.topics ?? []).filter((item) => item.submits > 0);
   const weak = practiced.filter((item) => item.accuracy < 0.8).slice(0, 4);
@@ -164,20 +154,6 @@ export function Dashboard() {
             </div>
           )}
         </article>
-      </section>
-
-      <section className="rounded-3xl border border-line bg-panel p-5">
-        <h2 className="text-sm font-semibold text-muted">Display name</h2>
-        <div className="mt-3 flex flex-wrap gap-2">
-          <input
-            className="min-w-[12rem] flex-1 rounded-xl border border-line bg-panel2 px-3 py-2 text-sm"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-          />
-          <button className="rounded-full bg-accent px-4 py-2 text-sm font-semibold text-black" onClick={() => void saveName()} type="button">
-            Save
-          </button>
-        </div>
       </section>
     </div>
   );

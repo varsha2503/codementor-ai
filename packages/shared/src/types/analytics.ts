@@ -91,6 +91,7 @@ export function topicStats(attempts: AttemptFact[]): TopicStat[] {
 
 export type DifficultyStat = {
   difficulty: Difficulty;
+  total: number;
   attempted: number;
   solved: number;
   accuracy: number;
@@ -101,13 +102,15 @@ export function difficultyStats(attempts: AttemptFact[], problems: ProblemFact[]
   const attempted = new Set(attempts.filter((item) => item.kind === "SUBMIT").map((item) => item.problemId));
   return (["EASY", "MEDIUM", "HARD"] as Difficulty[]).map((difficulty) => {
     const matching = problems.filter((problem) => problem.difficulty === difficulty);
+    const total = matching.length;
     const attemptedCount = matching.filter((problem) => attempted.has(problem.id)).length;
     const solvedCount = matching.filter((problem) => solved.has(problem.id)).length;
     return {
       difficulty,
+      total,
       attempted: attemptedCount,
       solved: solvedCount,
-      accuracy: attemptedCount === 0 ? 0 : solvedCount / attemptedCount,
+      accuracy: total === 0 ? 0 : solvedCount / total,
     };
   });
 }

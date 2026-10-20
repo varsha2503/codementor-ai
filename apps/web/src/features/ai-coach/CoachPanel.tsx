@@ -64,24 +64,21 @@ export function CoachPanel({
   return (
     <div className="flex h-full min-h-[28rem] flex-col text-sm">
       <div className="border-b border-ai/30 bg-ai/10 p-4">
-        <div className="flex items-center gap-3">
-          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-ai text-white shadow-[0_0_16px_rgba(59,130,246,0.55)]" aria-hidden="true">
-            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
-              <path d="M12 2.4 13.7 8 19.4 9.6 13.7 11.2 12 16.8 10.3 11.2 4.6 9.6 10.3 8 12 2.4Z" />
-              <path d="m18.2 14.2.8 2.3 2.4.7-2.4.8-.8 2.3-.7-2.3-2.4-.8 2.4-.7.7-2.3Z" />
-            </svg>
-          </span>
-          <div>
+        <div className="flex items-start gap-3">
+          <InterviewerAvatar />
+          <div className="min-w-0">
             <h2 className="font-semibold text-ai">AI Interviewer</h2>
             <p className="mt-0.5 text-xs text-muted">
               {STAGE_LABEL[stage]}. Each reply sends your current editor code. The interviewer discusses your logic; Run/Submit still decides correctness.
             </p>
           </div>
         </div>
-        <p className="mt-2 text-xs text-muted" aria-live="polite">
-          {VOICE_LABEL[phase]}
-          {voice.error ? `. ${voice.error}` : ""}
-        </p>
+        {(phase !== "idle" || voice.error) && (
+          <p className="mt-2 text-xs text-muted" aria-live="polite">
+            {VOICE_LABEL[phase]}
+            {voice.error ? `. ${voice.error}` : ""}
+          </p>
+        )}
       </div>
       <div className="min-h-0 flex-1 space-y-3 overflow-auto p-4">
         {turns.map((turn, index) => (
@@ -161,6 +158,37 @@ export function CoachPanel({
         )}
       </div>
     </div>
+  );
+}
+
+function BlueSparkle({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
+      <path d="M12 2.4 13.7 8 19.4 9.6 13.7 11.2 12 16.8 10.3 11.2 4.6 9.6 10.3 8 12 2.4Z" />
+    </svg>
+  );
+}
+
+function InterviewerAvatar() {
+  return (
+    <span
+      className="relative inline-flex shrink-0 rounded-2xl bg-gradient-to-br from-sky-200 via-ai to-blue-700 p-[3px] shadow-[0_0_24px_rgba(59,130,246,0.55)]"
+      aria-hidden="true"
+    >
+      <BlueSparkle className="pointer-events-none absolute -left-1.5 top-1/2 z-10 h-3.5 w-3.5 -translate-y-1/2 text-sky-100 drop-shadow-[0_0_10px_rgba(59,130,246,1)]" />
+      <BlueSparkle className="pointer-events-none absolute -right-1.5 top-1/2 z-10 h-3.5 w-3.5 -translate-y-1/2 text-sky-100 drop-shadow-[0_0_10px_rgba(59,130,246,1)]" />
+      <BlueSparkle className="pointer-events-none absolute -top-1.5 left-1/2 z-10 h-4 w-4 -translate-x-1/2 text-white drop-shadow-[0_0_12px_rgba(96,165,250,1)]" />
+      <BlueSparkle className="pointer-events-none absolute -bottom-1.5 left-1/2 z-10 h-3 w-3 -translate-x-1/2 text-sky-200 drop-shadow-[0_0_10px_rgba(59,130,246,0.95)]" />
+      <BlueSparkle className="pointer-events-none absolute -right-0.5 -top-0.5 z-10 h-3 w-3 text-sky-50 drop-shadow-[0_0_8px_rgba(59,130,246,1)]" />
+      <BlueSparkle className="pointer-events-none absolute -bottom-0.5 -left-0.5 z-10 h-2.5 w-2.5 text-sky-200 drop-shadow-[0_0_8px_rgba(59,130,246,0.9)]" />
+      <span className="relative overflow-hidden rounded-[13px] ring-2 ring-ai/50 ring-offset-1 ring-offset-ai/20">
+        <img
+          alt=""
+          className="block h-[3.75rem] w-[3.75rem] object-cover object-[50%_20%]"
+          src="/ai-interviewer-brand.png"
+        />
+      </span>
+    </span>
   );
 }
 

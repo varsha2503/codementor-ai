@@ -6,7 +6,7 @@ import { difficultyTone, topicLabel } from "../labels";
 type Analytics = {
   solved: number;
   topics: { topic: string; submits: number; accepted: number; accuracy: number }[];
-  difficulties: { difficulty: string; attempted: number; solved: number; accuracy: number }[];
+  difficulties: { difficulty: string; total: number; attempted: number; solved: number; accuracy: number }[];
   assistance: { independent: number; assisted: number };
   hintsByProblem: { slug: string; title: string; hints: number; solved: boolean }[];
   mistakes: { category: string; label: string; count: number; topics: string[] }[];
@@ -46,9 +46,11 @@ export function Progress() {
       <section className="grid gap-3 md:grid-cols-3">
         {analytics.difficulties.map((item) => (
           <article key={item.difficulty} className="rounded-3xl border border-line bg-panel p-5">
-            <p className={`text-sm ${difficultyTone(item.difficulty)}`}>{item.difficulty}</p>
-            <p className="mt-2 font-mono text-3xl">{item.attempted ? Math.round(item.accuracy * 100) : 0}%</p>
-            <p className="text-sm text-muted">{item.solved} solved of {item.attempted} attempted</p>
+            <p className={`text-sm uppercase tracking-wide ${difficultyTone(item.difficulty)}`}>{item.difficulty}</p>
+            <p className="mt-2 font-mono text-3xl">{item.total === 0 ? 0 : Math.round(item.accuracy * 100)}%</p>
+            <p className="text-sm text-muted">
+              {item.solved} solved of {item.total} questions
+            </p>
           </article>
         ))}
       </section>

@@ -96,6 +96,11 @@ export function SheetTracker() {
       .filter((topic) => topic.subtopics.length > 0);
   }, [inAppOnly, query, sheet, status]);
 
+  const byDifficulty = useMemo(
+    () => (sheet ? difficultyRollup(sheet, inAppOnly) : { Easy: { total: 0, solved: 0 }, Medium: { total: 0, solved: 0 }, Hard: { total: 0, solved: 0 } }),
+    [inAppOnly, sheet],
+  );
+
   if (error) return <p className="p-8 text-bad">{error}</p>;
   if (!sheet) return <p className="p-8 text-muted">Loading your sheet…</p>;
 
@@ -111,11 +116,24 @@ export function SheetTracker() {
         </div>
         <div className="mt-5 flex flex-wrap items-center gap-4 text-sm">
           <span className="font-mono text-lg">
-            {sheet.summary.solved} / {sheet.summary.practicable} solved in app
+            {sheet.summary.solved} / {sheet.summary.practicable} solved · {pct}%
           </span>
           <div className="h-2 min-w-[12rem] flex-1 overflow-hidden rounded-full bg-panel2">
             <div className="h-full rounded-full bg-good" style={{ width: `${pct}%` }} />
           </div>
+        </div>
+        <div className="mt-4 grid gap-2 sm:grid-cols-3">
+          {(["Easy", "Medium", "Hard"] as const).map((label) => {
+            const row = byDifficulty[label];
+            const rowPct = row.total === 0 ? 0 : Math.round((row.solved / row.total) * 100);
+            return (
+              <div key={label} className="rounded-2xl border border-line bg-panel2/60 px-3 py-2">
+                <p className={`text-xs font-semibold uppercase tracking-wide ${difficultyClass(label)}`}>{label}</p>
+                <p className="mt-1 font-mono text-lg">{row.solved} / {row.total}</p>
+                <p className="text-xs text-muted">{rowPct}% solved</p>
+              </div>
+            );
+          })}
         </div>
       </header>
 
@@ -149,9 +167,9 @@ export function SheetTracker() {
         {filteredTopics.map((topic) => {
           const topicOpen = openTopics.has(topic.name);
           return (
-            <section key={topic.name} className="overflow-hidden rounded-2xl border border-line bg-[#faf6f1] text-ink shadow-sm dark:bg-panel">
+            <section key={topic.name} className="overflow-hidden rounded-2xl border border-accent/25 bg-panel shadow-sm">
               <button
-                className="flex w-full items-center gap-3 px-4 py-3.5 text-left"
+                className="flex w-full items-center gap-3 border-l-4 border-accent bg-panel2/30 px-4 py-4 text-left"
                 onClick={() =>
                   setOpenTopics((prev) => {
                     const next = new Set(prev);
@@ -162,22 +180,25 @@ export function SheetTracker() {
                 }
                 type="button"
               >
-                <span className="font-semibold">
+                <span className="font-serif text-lg font-semibold leading-snug">
                   Step {topic.step}: {topic.name}
                 </span>
-                <span className="text-sm text-muted">
+                <span className="rounded-full bg-panel px-2 py-0.5 font-mono text-xs text-muted">
                   {topic.solved} / {topic.practicable || topic.total}
+                  {topic.practicable ? ` · ${Math.round((topic.solved / topic.practicable) * 100)}%` : ""}
                 </span>
                 <span className="ml-auto text-muted">{topicOpen ? "▾" : "▸"}</span>
               </button>
 
               {topicOpen && (
-                <div className="space-y-2 border-t border-line/60 bg-panel px-2 py-2">
+                <div className="space-y-2 border-t border-line/60 bg-panel2/20 px-3 py-3">
                   {topic.subtopics.map((subtopic, subIndex) => {
                     const key = `${topic.name}::${subtopic.name}`;
                     const subOpen = openSubtopics.has(key);
+                    const subTotal = subtopic.practicable || subtopic.total;
+                    const subPct = subTotal === 0 ? 0 : Math.round((subtopic.solved / subTotal) * 100);
                     return (
-                      <div key={key} className="overflow-hidden rounded-xl border border-line bg-panel2/40">
+                      <div key={key} className="overflow-hidden rounded-xl border border-line/80 bg-panel">
                         <button
                           className="flex w-full items-center gap-3 px-3 py-2.5 text-left text-sm"
                           onClick={() =>
@@ -190,13 +211,14 @@ export function SheetTracker() {
                           }
                           type="button"
                         >
-                          <span className="font-medium">
-                            Lec {subIndex + 1}: {subtopic.name}
+                          <span className="min-w-0 flex-1 font-medium text-muted">
+                            <span className="mr-2 font-mono text-[10px] uppercase tracking-wider text-accent/90">Lec {subIndex + 1}</span>
+                            <span className="text-ink">{subtopic.name}</span>
                           </span>
-                          <span className="text-muted">
-                            {subtopic.solved} / {subtopic.practicable || subtopic.total}
+                          <span className="shrink-0 font-mono text-xs text-muted">
+                            {subtopic.solved}/{subTotal} · {subPct}%
                           </span>
-                          <span className="ml-auto text-muted">{subOpen ? "▾" : "▸"}</span>
+                          <span className="shrink-0 text-muted">{subOpen ? "▾" : "▸"}</span>
                         </button>
 
                         {subOpen && (
@@ -244,6 +266,25 @@ export function SheetTracker() {
       </div>
     </div>
   );
+}
+
+function difficultyRollup(sheet: SheetPayload, inAppOnly: boolean) {
+  const rows = {
+    Easy: { total: 0, solved: 0 },
+    Medium: { total: 0, solved: 0 },
+    Hard: { total: 0, solved: 0 },
+  };
+  for (const topic of sheet.topics) {
+    for (const subtopic of topic.subtopics) {
+      for (const item of subtopic.items) {
+        if (inAppOnly && !item.localSlug) continue;
+        if (!item.difficultyLabel) continue;
+        rows[item.difficultyLabel].total += 1;
+        if (item.status === "solved") rows[item.difficultyLabel].solved += 1;
+      }
+    }
+  }
+  return rows;
 }
 
 function difficultyClass(label: "Easy" | "Medium" | "Hard") {
